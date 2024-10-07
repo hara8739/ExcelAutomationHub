@@ -1,0 +1,29 @@
+Sub GetCellBackgroundColorHex()
+    Dim cell As Range
+    Dim colorCode As Long
+    Dim hexCode As String
+    
+    ' 対象のセルを設定します
+    Set cell = Range("B4")
+    
+    ' セルの背景色のカラーコードを取得します
+    colorCode = cell.Interior.Color
+    
+    ' 16進数形式に変換します
+    hexCode = ColorCodeToHex(colorCode)
+    
+    ' カラーコードを表示します
+    MsgBox "セルの背景色のカラーコードは: " & hexCode
+End Sub
+
+Function ColorCodeToHex(colorCode As Long) As String
+    ' RGB値を計算します
+    Dim red As Long, green As Long, blue As Long
+    red = colorCode Mod 256
+    green = (colorCode \ 256) Mod 256
+    blue = (colorCode \ 65536) Mod 256
+    
+    ' 16進数形式の文字列を作成します
+    ColorCodeToHex = "#" & Right("00" & Hex(red), 2) & Right("00" & Hex(green), 2) & Right("00" & Hex(blue), 2)
+End Function
+
