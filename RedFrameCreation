@@ -1,0 +1,35 @@
+Option Explicit
+
+Sub RedFrameCreation()
+
+    ' 選択したセルに合わせて四角形を作成
+    Dim newShape As Shape
+    Set newShape = ActiveSheet.Shapes.AddShape(msoShapeRectangle, _
+        Selection.Left, _
+        Selection.Top, _
+        Selection.Width, _
+        Selection.Height)
+
+    ' 塗りつぶしなし
+    newShape.Fill.Visible = msoFalse
+    
+    ' 四角形の線の設定
+    With newShape.Line
+    
+        ' 線を表示
+        .Visible = msoTrue
+        
+        ' 色を赤に設定
+        .ForeColor.RGB = RGB(255, 0, 0)
+        
+        ' 透明度を0に設定(不透明)
+        .Transparency = 0
+        
+        ' 線の太さを3に設定
+        .Weight = 1.75
+        
+    End With
+
+End Sub
+
+
