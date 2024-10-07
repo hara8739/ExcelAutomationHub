@@ -1,6 +1,6 @@
 Option Explicit
 
-Sub CreateRandomNumbers()
+Sub CreateRandomNumbers1()
     Dim i As Integer
     Dim randomNumber As Integer
     Dim ws As Worksheet
