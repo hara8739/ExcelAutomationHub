@@ -1,0 +1,16 @@
+Option Explicit
+
+Sub CreateRandomNumbers()
+    Dim i As Integer
+    Dim randomNumber As Integer
+    Dim ws As Worksheet
+    
+    ' 新しいシートを作成
+    Set ws = ThisWorkbook.Sheets.Add
+    
+    ' ランダムな数字を200個生成してセルに書き込む
+    For i = 1 To 200
+        randomNumber = Int((190 - 140 + 1) * Rnd + 140) ' 140から190までのランダムな整数を生成
+        ws.Cells(i, 1).Value = randomNumber ' i行1列に数値を書き込む
+    Next i
+End Sub
