@@ -1,0 +1,20 @@
+Option Explicit
+
+Sub ClearValues()
+
+    Dim LR As Long
+
+    ' 列Aの最終行を取得
+    LR = Cells(Rows.Count, "A").End(xlUp).Row
+
+    ' 列Aのデータをクリア
+    If LR > 1 Then
+        Range("A1:A" & LR).ClearContents
+    End If
+
+    ' A1セルをアクティブセルにする
+    Range("A1").Select
+    
+    MsgBox "値をクリアしました", vbInformation
+    
+End Sub
