@@ -1,0 +1,17 @@
+Option Explicit
+
+Sub CreateRandomNumbers2()
+    Dim i As Integer
+    Dim randomNumber As Double
+    Dim ws As Worksheet
+    
+    ' 新しいシートを作成
+    Set ws = ThisWorkbook.Sheets.Add
+    
+    ' ランダムな少数を2928個生成してセルに書き込む
+    For i = 1 To 2928
+        ' -0.001から0.001までのランダムな少数を生成
+        randomNumber = WorksheetFunction.RandBetween(-1, 1) / 1000
+        ws.Cells(i, 1).Value = randomNumber ' i行1列に数値を書き込む
+    Next i
+End Sub
