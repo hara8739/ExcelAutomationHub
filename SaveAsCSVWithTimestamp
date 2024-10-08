@@ -1,0 +1,24 @@
+Option Explicit
+
+Sub SaveAsCSVWithTimestamp()
+    Dim ws As Worksheet
+    Dim filePath As String
+    Dim timeStamp As String
+    
+    ' 保存するシートを設定
+    Set ws = ThisWorkbook.Sheets(1) ' シート1を指定
+    
+    ' 現在の日時を取得して、アンダースコア記号と共にファイル名に付加（"yyyy-mm-dd_hhmmss"形式）
+    timeStamp = Format(Now(), "yyyy-mm-dd_hhmmss")
+    
+    ' 保存するファイルパスを設定（Excelファイルのパスと同じ場所に、シート名＋タイムスタンプで保存）
+    filePath = ThisWorkbook.Path & "\" & ws.Name & "_" & timeStamp & ".csv"
+    
+    ' CSVとして保存
+    ws.Copy
+    ActiveWorkbook.SaveAs Filename:=filePath, FileFormat:=xlCSV, CreateBackup:=False
+    ActiveWorkbook.Close False
+    
+    MsgBox "CSVファイルとして保存されました: " & filePath
+End Sub
+
