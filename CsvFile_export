@@ -1,0 +1,69 @@
+Option Explicit
+
+Sub CsvFile_export()
+
+    Dim alert As VbMsgBoxResult
+    Dim ws As Worksheet
+    Dim csvFile As String
+    Dim dataRange As Range
+    Dim currentTime As String, year As String
+    Dim i As Long, j As Long
+    Dim FileNumber As Long
+    Dim LR As Long, LC As Long
+
+    '確認メッセージボックスを表示
+    alert = MsgBox("出力実行しますか？", vbYesNo + vbQuestion)
+    'ユーザーが「はい」をクリックすると、次のコードを実行する
+    If alert = vbYes Then
+
+        'ワークシートを現在のワークブックの「結果」シートに設定
+        Set ws = ThisWorkbook.Worksheets("結果")
+
+        'セルB3から年を取得し、Format関数で現在の日付時刻を取得する
+        year = Cells(1, 1)
+        currentTime = Format(Now(), "yyyymmddhhmmss")
+
+        'CSVファイルのパスと名前を生成
+        csvFile = ThisWorkbook.Path & "\" & year & "_" & currentTime & "keims_margin.csv"
+
+        'ワークシート内のデータの最後の行と最後の列を取得
+        LR = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+        LC = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+
+        'ワークシート内のすべてのデータを含むようにデータ範囲を設定
+        Set dataRange = ws.Range(ws.Cells(1, 1), ws.Cells(LR, LC))
+
+        'Transpose関数でデータ範囲の行列を入れ替えて配置する
+        Dim resultArray As Variant
+        resultArray = Application.Transpose(dataRange.Value)
+
+        '書き込み用にCSVファイルを開く
+        FileNumber = FreeFile
+        Open csvFile For Output As #FileNumber
+
+        '配列をループしてデータをCSVファイルに書き込む
+        For i = 1 To UBound(resultArray, 1)
+            For j = 1 To UBound(resultArray, 2)
+                If j <> UBound(resultArray, 2) Then
+                    Print #FileNumber, resultArray(i, j) & ","; 'セルの値とカンマを書き込む
+                Else
+                    Print #FileNumber, resultArray(i, j) & vbCr; 'セルの値と改行を書き込む
+                End If
+            Next j
+        Next i
+
+        'CSVファイルを閉じる
+        Close #FileNumber
+
+        '完了メッセージを表示
+        MsgBox "Done!", vbInformation
+
+    Else
+    MsgBox "処理を中止します", vbCritical
+    
+
+    End If
+
+End Sub
+
+
