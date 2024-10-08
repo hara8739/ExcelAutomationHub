@@ -1,0 +1,27 @@
+Option Explicit
+
+Sub HighlightCells()
+    Dim ws As Worksheet
+    Dim cell As Range
+    Dim searchRange As Range
+    
+    ' アクティブシートを使用
+    Set ws = ActiveSheet
+    
+    ' シートの最終使用セルまでの範囲を取得
+    Set searchRange = ws.UsedRange
+    
+    ' 各セルをループしてアスタリスクが含まれているかチェック
+    For Each cell In searchRange
+        ' デバッグ用メッセージを表示
+        If cell.Value <> "" Then
+            Debug.Print cell.Address, cell.Value
+        End If
+            ' 文字列を任意の文字に変更する
+        If cell.Value Like "文字列" Then
+            ' セルの背景色をピンクに設定
+            cell.Interior.Color = RGB(255, 204, 255)
+        End If
+    Next cell
+End Sub
+
