@@ -11,13 +11,13 @@ Sub HighlightCells()
     ' シートの最終使用セルまでの範囲を取得
     Set searchRange = ws.UsedRange
     
-    ' 各セルをループしてアスタリスクが含まれているかチェック
+    ' 各セルをループして文字列が含まれているかチェック
     For Each cell In searchRange
         ' デバッグ用メッセージを表示
         If cell.Value <> "" Then
             Debug.Print cell.Address, cell.Value
         End If
-            ' 文字列を任意の文字に変更する
+            ' 文字列部分を設定する
         If cell.Value Like "文字列" Then
             ' セルの背景色をピンクに設定
             cell.Interior.Color = RGB(255, 204, 255)
