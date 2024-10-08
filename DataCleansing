@@ -1,0 +1,61 @@
+Sub DataCleansing()
+
+    Dim cell As Range
+    Dim originalValue As String
+    Dim cleansedValue As String
+    Dim ws As Worksheet
+    
+    ' アクティブなシートを指定
+    Set ws = ActiveSheet
+    
+    ' シート内の使用されている範囲（データが入っている範囲）を取得
+    For Each cell In ws.UsedRange
+        ' セルの内容を取得
+        originalValue = cell.Value
+        
+        ' 1. 全角数字を半角に修正
+        cleansedValue = ReplaceFullWidthNumbers(originalValue)
+        
+        ' 2. 全角スペースを半角スペースに修正
+        cleansedValue = Replace(cleansedValue, "　", " ")
+        
+        ' 3. 2つ以上連続した半角スペースを1つに修正
+        cleansedValue = ReplaceMultipleSpaces(cleansedValue)
+        
+        ' 4. 改行コードを削除する
+        cleansedValue = Replace(cleansedValue, vbCrLf, "")
+        cleansedValue = Replace(cleansedValue, vbLf, "")
+        
+        ' 5. 全角（）を半角に修正
+        cleansedValue = Replace(cleansedValue, "（", "(")
+        cleansedValue = Replace(cleansedValue, "）", ")")
+        
+        ' セルにクレンジングされた値を反映
+        cell.Value = cleansedValue
+    Next cell
+    
+End Sub
+
+' 全角数字を半角に置き換える関数
+Function ReplaceFullWidthNumbers(ByVal text As String) As String
+    Dim i As Integer
+    Dim fullWidthNumbers As String
+    Dim halfWidthNumbers As String
+    
+    fullWidthNumbers = "０１２３４５６７８９"
+    halfWidthNumbers = "0123456789"
+    
+    For i = 1 To Len(fullWidthNumbers)
+        text = Replace(text, Mid(fullWidthNumbers, i, 1), Mid(halfWidthNumbers, i, 1))
+    Next i
+    
+    ReplaceFullWidthNumbers = text
+End Function
+
+' 複数の半角スペースを1つに置き換える関数
+Function ReplaceMultipleSpaces(ByVal text As String) As String
+    Do While InStr(text, "  ") > 0
+        text = Replace(text, "  ", " ")
+    Loop
+    ReplaceMultipleSpaces = text
+End Function
