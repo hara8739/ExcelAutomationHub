@@ -1,0 +1,38 @@
+Option Explicit
+
+Sub SetYAxisToFixedRange()
+    Dim ws As Worksheet
+    Dim ch As ChartObject
+    Dim minY As Double
+    Dim maxY As Double
+    Dim userResponse As VbMsgBoxResult
+    
+    ' 設定したいY軸の範囲
+    minY = 0 ' 最小値を設定
+    maxY = 140 ' 最大値を設定
+    
+    ' 実行確認のメッセージボックス
+    userResponse = MsgBox("すべてのグラフのY軸の範囲を " & minY & " から " & maxY & " に設定します。" & vbCrLf & "実行しますか？", vbYesNo + vbQuestion, "Y軸範囲の設定")
+    
+    ' [いいえ] が選択された場合は処理を中止
+    If userResponse = vbNo Then
+        MsgBox "処理を中止しました。", vbInformation
+        Exit Sub
+    End If
+    
+    ' すべてのシートをループ
+    For Each ws In ThisWorkbook.Sheets
+        ' シート内のすべてのグラフをループ
+        For Each ch In ws.ChartObjects
+            On Error Resume Next ' エラー処理
+            With ch.Chart.Axes(xlValue) ' Y軸
+                .MinimumScale = minY
+                .MaximumScale = maxY
+            End With
+            On Error GoTo 0 ' エラー処理終了
+        Next ch
+    Next ws
+    
+    ' 完了メッセージ
+    MsgBox "すべてのグラフのY軸の範囲を " & minY & " から " & maxY & " に設定しました。", vbInformation
+End Sub
