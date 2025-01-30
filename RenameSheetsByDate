@@ -1,0 +1,44 @@
+Option Explicit
+
+Sub RenameSheetsByDate()
+    Dim ws As Worksheet
+    Dim newName As String
+    Dim dateValue As Variant
+    Dim existingName As String
+    Dim userResponse As VbMsgBoxResult
+    
+    ' 実行確認のメッセージボックス
+    userResponse = MsgBox("すべてのシート名をセルA2の日付に基づいて変更します。" & vbCrLf & _
+                          "実行してよろしいですか？", vbYesNo + vbQuestion, "シート名変更の確認")
+    
+    ' [いいえ] が選択された場合は処理を中止
+    If userResponse = vbNo Then
+        MsgBox "処理を中止しました。", vbInformation
+        Exit Sub
+    End If
+    
+    On Error Resume Next ' エラーが発生してもスキップ
+    For Each ws In ThisWorkbook.Worksheets
+        dateValue = ws.Range("A2").Value
+        
+        If IsDate(dateValue) Then
+            newName = Format(dateValue, "yyyy.m.d")
+            
+            ' シート名の重複を防ぐ
+            existingName = ""
+            existingName = ThisWorkbook.Worksheets(newName).Name
+            If Err.Number <> 0 Then ' エラーが出た場合、新しい名前は使用可能
+                ws.Name = newName
+            Else
+                MsgBox "シート名 '" & newName & "' はすでに使用されています。", vbExclamation
+            End If
+            Err.Clear
+        Else
+            MsgBox "シート '" & ws.Name & "' のA2セルが有効な日付ではありません。", vbExclamation
+        End If
+    Next ws
+    On Error GoTo 0
+    
+    ' 完了メッセージ
+    MsgBox "シート名の変更が完了しました。", vbInformation
+End Sub
